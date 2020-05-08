@@ -5,6 +5,8 @@ Created on Thu Apr 23 19:13:19 2020
 @author: BenK
 """
 import random
+import time
+import sys
 
 # Personal attempt at a Conway Game of Life.
 
@@ -66,13 +68,13 @@ blinker = [[0,0,0,0,0],
            [0,0,0,0,0],
            [0,1,1,1,0],
            [0,0,0,0,0],
-           [0,0,0,0,0]]
+           [0,0,0,0,0],
+            [0,0,0,0,0],
+            [0,0,0,0,0]]
 
 toad = [[0,0,0,0,0,0],
-        [0,0,0,0,0,0],
         [0,0,1,1,1,0],
         [0,1,1,1,0,0],
-        [0,0,0,0,0,0],
         [0,0,0,0,0,0]]
 
 beacon = [[0,0,0,0,0,0],
@@ -86,39 +88,23 @@ glider = 	[[0,0,0,0,0,0,0,0,0,0],
 		 [0,0,0,0,0,1,0,0,0,0],
 		 [0,0,0,0,0,0,1,0,0,0],
 		 [0,0,0,0,1,1,1,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0]]
+    [0,0,0,0,0,0,0,0,0,0]]
 
-lwss = 		[[0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,1,1,1,1,0,0,0],
-		 [0,0,1,0,0,0,1,0,0,0],
-		 [0,0,0,0,0,0,1,0,0,0],
-		 [0,0,1,0,0,1,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0],
-		 [0,0,0,0,0,0,0,0,0,0]]
+lwss = 		[[0,0,0,0,0,0,0,0],
+		 [0,0,0,1,1,1,1,0],
+		 [0,0,1,0,0,0,1,0],
+		 [0,0,0,0,0,0,1,0],
+		 [0,0,1,0,0,1,0,0],
+		 [0,0,0,0,0,0,0,0]]
 
-mwss = 		[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-             [0,0,0,0,0,1,1,1,1,1,0,0,0,0,0],
-             [0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
-		     [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
-		     [0,0,0,0,1,0,0,0,1,0,0,0,0,0,0],
-             [0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
-		     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		     [0,0,0,0,1,1,1,1,1,0,0,0,0,0,0],
-		     [0,0,0,1,0,0,0,0,1,0,0,0,0,0,0],
-		     [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
-		     [0,0,0,1,0,0,0,1,0,0,0,0,0,0,0],
-		     [0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]]
+mwss = 		[[0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,1,1,1,1,1,0],
+             [0,0,0,0,1,0,0,0,0,1,0],
+		     [0,0,0,0,0,0,0,0,0,1,0],
+		     [0,0,0,0,1,0,0,0,1,0,0],
+             [0,0,0,0,0,0,1,0,0,0,0],
+		     [0,0,0,0,0,0,0,0,0,0,0]]
 
 
 hwss =      [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -128,14 +114,7 @@ hwss =      [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 		     [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
 		     [0,0,1,0,0,0,0,1,0,0,0,0,0,0,0],
              [0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],
-		     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-		     [0,0,0,0,0,0,1,1,1,1,1,1,0,0,0],
-		     [0,0,0,0,0,1,0,0,0,0,0,1,0,0,0],
-		     [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
-		     [0,0,0,0,0,1,0,0,0,0,1,0,0,0,0],
-		     [0,0,0,0,0,0,0,1,1,0,0,0,0,0,0]]
+		     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
 
 penta_decathlon = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -204,20 +183,21 @@ acorn = blank_twenty
 acorn[10][10]=acorn[11][12]=acorn[12][9]=acorn[12][10]=acorn[12][13]=acorn[12][14]=acorn[12][15] = 1
 
 def update(grid):
-    a = len(grid[0])
+    a = len(grid)
+    b = len(grid[0])
                                 
-    new_grid = [[0 for x in range(a)] for y in range(a)]
+    new_grid = [[0 for x in range(b)] for y in range(a)]
     
     for i in range(a):
-        for j in range(a):
-            sum = (grid[(i-1)%a][(j-1)%a]       # Number 1 position
-                + grid[(i+1)%a][(j-1)%a]        # Number 7 position
-                + grid[(i-1)%a][(j+1)%a]        # Number 3 position
-                + grid[(i+1)%a][(j+1)%a]        # Number 9 position
+        for j in range(b):
+            sum = (grid[(i-1)%a][(j-1)%b]       # Number 1 position
+                + grid[(i+1)%a][(j-1)%b]        # Number 7 position
+                + grid[(i-1)%a][(j+1)%b]        # Number 3 position
+                + grid[(i+1)%a][(j+1)%b]        # Number 9 position
                 + grid[(i+1)%a][j]              # Number 8 position
                 + grid[(i-1)%a][j]              # Number 2 position
-                + grid[i][(j+1)%a]              # Number 6 position
-                + grid[i][(j-1)%a])             # Number 4 position
+                + grid[i][(j+1)%b]              # Number 6 position
+                + grid[i][(j-1)%b])             # Number 4 position
             #print(str(grid[(i-1)%a][(j-1)%a]))
             #print("[i][j] sum for[" + str(i) + "][" + str(j) + "] is:\t" + str(sum))
             if(grid[i][j] == 1):
@@ -227,23 +207,26 @@ def update(grid):
                     new_grid[i][j] = 1
             elif(grid[i][j] == 0 and sum == 3):
                 new_grid[i][j] = 1
+                
+    #print(str(len(new_grid)) + 'x' + str(len(new_grid[0])))
     return new_grid
 
 def one_update(grid):
-    a = len(grid[0])
-    new_grid = [[0 for x in range(a)] for y in range(a)]
+    a = len(grid)
+    b = len(grid[0])
+    new_grid = [[0 for x in range(a)] for y in range(b)]
     
     i = 1
     j = 1
     
-    sum = (grid[(i-1)%a][(j-1)%a]       # Number 1 position
-        + grid[(i+1)%a][(j-1)%a]        # Number 7 position
-        + grid[(i-1)%a][(j+1)%a]        # Number 3 position
-        + grid[(i+1)%a][(j+1)%a]        # Number 9 position
+    sum = (grid[(i-1)%a][(j-1)%b]       # Number 1 position
+        + grid[(i+1)%a][(j-1)%b]        # Number 7 position
+        + grid[(i-1)%a][(j+1)%b]        # Number 3 position
+        + grid[(i+1)%a][(j+1)%b]        # Number 9 position
         + grid[(i+1)%a][j]              # Number 8 position
         + grid[(i-1)%a][j]              # Number 2 position
-        + grid[i][(j+1)%a]              # Number 6 position
-        + grid[i][(j-1)%a])             # Number 4 position
+        + grid[i][(j+1)%b]              # Number 6 position
+        + grid[i][(j-1)%b])             # Number 4 position
             
     if(grid[i][j] == 1):
         if(sum < 2 or sum > 3):
@@ -258,7 +241,7 @@ def one_update(grid):
 
 def display(grid):
     row = ""
-    for i in range(len(grid[0])):
+    for i in range(len(grid)):
         for j in range(len(grid[0])):
             if(grid[i][j] == 1):
                 row = row + "O " 
@@ -268,25 +251,66 @@ def display(grid):
    # print("\n")
     print(row)
     #print("\n")
-
-ex_grid = acorn
-
-#print("ORIGINAL GRID\n")
-#display(ex_grid)
-#new_grid = update(ex_grid)
-#print("\n\n\n")
-#print("NEW GRID\n")
-#display(new_grid)
-
-
-while(True):
-    display(ex_grid)
     
-    try:
-        input("")
-        ex_grid = update(ex_grid)
+def cmd_display(grid):
+    while(True):
+        display(grid)
+    
+        try:
+            input("")
+            ex_grid = update(grid)
         
-    except KeyboardInterrupt:
-        exit()
-    
+        except KeyboardInterrupt:
+            exit()
+
+def cmd_auto_display(grid):
+    display(grid)
+    while(True):
+        try:
+            time.sleep(50)
+            display(update(grid))
+        except KeyboardInterrupt:
+            exit()
+            
+grid_dict = {
+"block" : block,
+"beehive" : beehive,
+"loaf" : loaf,
+"boat" : boat,
+"tub" : tub,
+"blinker" : blinker,
+"toad" : toad,
+"beacon" : beacon,
+"glider" : glider,
+"lwss" : lwss,
+"mwss" : mwss,
+"hwss" : hwss,
+"penta-decathlon" : penta_decathlon,
+"pulsar" : pulsar,
+"acorn" : acorn,
+}
+        
+grid_input = sys.argv[1]
+
+ex_grid = grid_dict[grid_input]
+
+def cmd_auto_display(grid):
+    display(grid)
+    while(True):
+        #display(ex_grid)
+        
+    #    try:
+    #        input("")
+    #        ex_grid = update(ex_grid)
+    #        
+    #    except KeyboardInterrupt:
+    #        exit()
+        try:
+            time.sleep(0.2)
+            grid = update(grid)
+            display(grid)
+        except KeyboardInterrupt:
+            exit()
+            
+cmd_auto_display(ex_grid)
 
